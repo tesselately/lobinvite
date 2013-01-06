@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-import string
+import os
 from random import choice
+import string
 
 from flask import Flask, render_template, request, g, session, flash, \
      redirect, url_for, abort
@@ -17,6 +18,9 @@ app.config.update(
     SECRET_KEY='development key',
     DEBUG=True,
 )
+
+if 'LOBINVITE_SETTINGS' in os.environ:
+    app.config.from_envvar('LOBINVITE_SETTINGS')
 
 
 oid = OpenID(app)
