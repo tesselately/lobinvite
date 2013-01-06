@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Hello, potential moonstar</h1>
+
+    <p>Friends of the founders get self-serve invitations. Sign in with Steam for yours.</p>
+
+    <form method="post" action="{{ url_for('index') }}">
+        <p><button><img src="{{ url_for('static', filename='sits_small.png') }}"></button></p>
+    </form>
+
+{% endblock %}
