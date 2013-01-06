@@ -17,6 +17,7 @@ app.config.update(
     #DSN='dbname=lobsters user=lobsters host=localhost',
     SECRET_KEY='development key',
     DEBUG=True,
+    FRIEND_STEAM_IDS=(),
 )
 
 if 'LOBINVITE_SETTINGS' in os.environ:
@@ -24,8 +25,6 @@ if 'LOBINVITE_SETTINGS' in os.environ:
 
 
 oid = OpenID(app)
-
-FRIEND_STEAM_IDS = ('76561197983885506',)
 
 
 @app.route('/join', methods=['GET', 'POST'])
@@ -39,9 +38,10 @@ def index():
 @oid.after_login
 def finish_steam_login(resp):
     steam_id = resp.identity_url.split('/')[-1]
-    if steam_id in FRIEND_STEAM_IDS:
+    if steam_id in app.config['FRIEND_STEAM_IDS']:
         return invite()
     return render_template('ask.html')
+
 
 def invite():
     now = datetime.utcnow().isoformat()
