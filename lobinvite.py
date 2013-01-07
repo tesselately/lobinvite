@@ -18,6 +18,7 @@ app.config.update(
     SECRET_KEY='development key',
     DEBUG=True,
     FRIEND_STEAM_IDS=(),
+    INVITE_CODES=(),
 )
 
 if 'LOBINVITE_SETTINGS' in os.environ:
@@ -32,6 +33,8 @@ oid = OpenID(app)
 def index():
     if request.method == 'POST':
         return oid.try_login('http://steamcommunity.com/openid')
+    if request.query_string and request.query_string in app.config['INVITE_CODES']:
+        return invite('invite code ' + request.query_string)
     return render_template('index.html')
 
 
@@ -39,11 +42,11 @@ def index():
 def finish_steam_login(resp):
     steam_id = resp.identity_url.split('/')[-1]
     if steam_id in app.config['FRIEND_STEAM_IDS']:
-        return invite()
+        return invite("steam " + steam_id)
     return render_template('ask.html')
 
 
-def invite():
+def invite(reason):
     now = datetime.utcnow().isoformat()
     letter_digits = string.letters + string.digits
     code = ''.join(choice(letter_digits) for x in xrange(15))
@@ -52,7 +55,7 @@ def invite():
     conn = psycopg2.connect(app.config['DSN'])
     cur = conn.cursor()
     cur.execute("INSERT INTO invitations (user_id, code, created_at, updated_at, memo) VALUES (%s, %s, %s, %s, %s)",
-        (1, code, now, now, 'self-serve invitation'))
+        (1, code, now, now, 'self-serve invitation (%s)' % reason))
     conn.commit()
     cur.close()
     conn.close()
