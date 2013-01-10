@@ -33,8 +33,8 @@ oid = OpenID(app)
 def index():
     if request.method == 'POST':
         return oid.try_login('http://steamcommunity.com/openid')
-    if request.query_string and request.query_string in app.config['INVITE_CODES']:
-        return invite('invite code ' + request.query_string)
+    if request.args.get('code') in app.config['INVITE_CODES']:
+        return invite('invite code ' + request.args['code'])
     return render_template('index.html')
 
 
