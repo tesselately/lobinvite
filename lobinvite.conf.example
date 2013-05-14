@@ -1,0 +1,26 @@
+# Set this to False once the site works.
+DEBUG = False
+
+# See "How to generate a secret key" in
+# http://flask.pocoo.org/docs/quickstart/#sessions
+SECRET_KEY = 'a secret key'
+
+# Set this to the domain name so the app can generate OpenID URLs etc.
+SERVER_NAME = 'example.com'
+
+# The DSN to your lobste.rs site.
+DSN = 'dbname=lobsters'
+
+# Find your friends' Steam IDs by going to their Steam profile pages and
+# copying from the "ajaxFriendUrl" JavaScript variable. This is a pain but
+# they don't seem to be listed on your friends list page anymore.
+STEAM_FRIEND_IDS = (
+#    '765...',
+#    '765...',
+)
+
+# Add "?code=<thecode>" to the lobinvite page URL to make the URL to give
+# friends to redeem the code.
+INVITE_CODES = (
+#    'invitationcode',
+)
